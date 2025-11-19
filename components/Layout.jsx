@@ -3,7 +3,7 @@ export default function Layout({ children }) {
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="max-w-6xl mx-auto p-6">
         <nav className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Grace Church</h1>
+          <h1 className="text-2xl font-semibold">🍀CloversChurch🍀</h1>
           <div className="space-x-4">
             <a href="/" className="hover:underline">Home</a>
             <a href="/blog" className="hover:underline">Blog</a>
