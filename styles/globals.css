@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #__next { height: 100%; }
+
+.banner-gradient {
+  background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(236,72,153,0.08));
+}
