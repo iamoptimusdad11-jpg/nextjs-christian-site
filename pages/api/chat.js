@@ -22,7 +22,7 @@ export default async function handler(req, res) {
           {
             role: "system",
             content:
-              "You are a compassionate Christian helper who responds with kindness, clarity, and biblical insight.",
+              "You are a compassionate Christian helper who speaks gently, clearly, and encourages users with uplifting biblical guidance.",
           },
           { role: "user", content: message },
         ],
