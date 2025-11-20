@@ -1,5 +1,3 @@
-import OpenAI from "openai";
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -8,29 +6,44 @@ export default async function handler(req, res) {
   const { message } = req.body;
 
   if (!message) {
-    return res.status(400).json({ error: "No message provided" });
+    return res.status(400).json({ error: "Message is required" });
   }
 
   try {
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a gentle, compassionate Christian guide. Provide comforting, biblically-informed support.",
-        },
-        { role: "user", content: message },
-      ],
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a compassionate Christian helper who responds with kindness, clarity, and biblical insight.",
+          },
+          { role: "user", content: message },
+        ],
+      }),
     });
 
-    res.status(200).json({
-      reply: response.choices[0].message.content,
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("OpenAI API Error:", data);
+      return res.status(500).json({
+        error: "Failed to reach AI service",
+        details: data,
+      });
+    }
+
+    return res.status(200).json({
+      reply: data.choices?.[0]?.message?.content || "No response received.",
     });
   } catch (error) {
-    console.error("Chat API error:", error);
-    res.status(500).json({ error: "Failed to connect to chat service" });
+    console.error("Server Error:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 }
